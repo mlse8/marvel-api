@@ -106,3 +106,51 @@ const updatePagination = async (callback) => {
     }
     isEventAtached = false
 }
+
+const renderComicCard = (comic) => {
+    return `
+        <div class="show-comic-details comic cursor-pointer" data-id="${comic.id}">
+            <figure class="shadow-lg shadow-gray-400 transition duration-300">
+                <img src="${comic.thumbnail.path}/portrait_uncanny.${comic.thumbnail.extension}" alt="marvel-comic" class="h-full mb-4">
+            </figure>
+            <h3 class="text-sm font-bold transition duration-300">${comic.title}</h3>
+        </div>
+    `
+}
+
+const renderCharacterCard = (character) => {
+    return `<div class="show-character-details character cursor-pointer" data-id="${character.id}"> 
+        <figure class="border-b-4 border-red-600 overflow-hidden">
+            <img src="${character.thumbnail.path}/portrait_uncanny.${character.thumbnail.extension}" alt="marvel-character" class="character-thumbnail transition duration-300">
+        </figure>
+        <div class="character-name bg-gray-950 transition duration-300">
+            <h3 class="h-24 py-4 px-6 text-sm font-bold text-white">${character.name}</h3>
+        </div>
+    </div>`
+}
+
+const renderComics = (data) => {
+    let acc = ''
+    data.forEach(comic => {
+        acc += renderComicCard(comic)
+    })
+
+    container.innerHTML = acc
+    container.classList.remove("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+    container.classList.add("grid-cols-3", "md:grid-cols-5")
+
+    getIdResource($$('.show-comic-details'), (id) => showComicDetails(id), (id) => updateResourceData('comics', id, 'characters'))
+}
+
+const renderCharacters = (data) => {
+    let acc = ''
+    data.forEach(character => {
+        acc += renderCharacterCard(character)
+    })
+
+    container.innerHTML = acc
+    container.classList.remove("grid-cols-3", "md:grid-cols-5")
+    container.classList.add("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+
+    getIdResource($$('.show-character-details'), (id) => showCharacterDetails(id), (id) => updateResourceData('characters', id, 'comics'))
+}
