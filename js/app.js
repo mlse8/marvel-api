@@ -181,6 +181,17 @@ const renderOptions = () => {
             <option value="focDate">Más viejos</option>`
 }
 
+const formatReleaseDate = (comic) => {
+    const onSaleDate = comic.dates.find((date) => date.type === 'onsaleDate')
+
+    if (onSaleDate && onSaleDate.date) {
+        const releaseDate = new Intl.DateTimeFormat('es-AR').format(new Date(onSaleDate.date))
+        return releaseDate
+    } else {
+        return 'Fecha no disponible'
+    }
+}
+
 const showComicDetails = async (comicId) => {
     showDetails()
     const { results: [comic] } = await getResourceData('comics', comicId)
@@ -196,7 +207,7 @@ const showComicDetails = async (comicId) => {
         <div>
             <h2 class="mb-5 text-2xl font-bold">${comic.title}</h2>
             <h3 class="mb-5 text-lg font-bold">Publicado:</h3>
-            <p class="mb-5"></p>
+            <p class="mb-5">${formatReleaseDate(comic)}</p>
             <h3 class="mb-5 text-lg font-bold">Guionistas:</h3>
             <p class="mb-5">${writers}</p>
             <h3 class="mb-5 text-lg font-bold">Descripción:</h3>
