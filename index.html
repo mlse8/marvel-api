@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/ef3f394e31.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Ada Comics</title>
+</head>
+<body class="font-[Roboto]">
+    <header class="bg-gray-950">
+        <div class="flex justify-center">
+            <h1 class="px-2 font-[Bangers] text-5xl font-bold text-white bg-red-600">ADA COMICS</h1>
+        </div>
+    </header>
+    <div class="hero min-h-96 bg-cover"></div>
+    <main class="max-w-6xl m-auto px-5">
+        <!-- Búsqueda y filtros -->
+        <div class="my-16">
+            <h2 class="mb-5 text-2xl font-bold">Búsqueda</h2>
+            <div class="mb-5 flex flex-col gap-7 relative lg:flex-row lg:justify-between">
+                <input type="text" placeholder="Ingresá tu búsqueda" class="py-1.5 px-9 text-2xl border-b-2 border-neutral-900 outline-red-600 lg:min-w-[50%]" id="search-term">
+                <i class="fa-solid fa-magnifying-glass absolute top-4 left-2.5"></i>
+                <div class="flex flex-wrap items-center gap-7">
+                    <div class="flex gap-7">
+                        <div>
+                            <label for="type" class="text-xs font-bold text-gray-500">TIPO</label>
+                            <select name="type" id="type" class="font-bold text-sm outline-red-600">
+                                <option value="comics">COMICS</option>
+                                <option value="characters">PERSONAJES</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="sort" class="text-xs font-bold text-gray-500">ORDEN</label>
+                            <select name="sort" id="sort" class="font-bold text-sm outline-red-600"></select>
+                        </div>
+                    </div>
+                    <button class="ml-auto py-1.5 px-2.5 text-white bg-neutral-900 transition duration-300 hover:bg-red-600" type="button" id="search">BUSCAR</button>
+                </div>
+            </div>
+        </div>
+        <div class="relative">
+            <!-- Comic/Personaje -->
+            <section class="my-12 flex flex-col gap-12 md:flex-row hidden" id="resource-details"></section>
+            <!-- Resultados -->
+            <section>
+                <h2 class="mb-5 text-2xl font-bold" id="results-title"></h2>
+                <p class="mb-12 text-xs font-bold text-gray-500"><span id="total-results"></span> RESULTADOS</p>
+                <div class="mb-16 grid grid-cols-3 gap-y-14 gap-x-5 md:grid-cols-5" id="results"></div>
+                <div class="buttons-container flex justify-center gap-2.5">
+                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="first-page">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </button>
+                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="prev-page">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </button>
+                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="next-page">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="last-page">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </button>
+                </div>
+                <p class="mt-5 text-center text-xs font-bold text-gray-500">Pág <span id="page"></span> de <span id="total-pages"></span></p>
+            </section>
+            <div class="w-full h-full flex justify-center items-center absolute top-0 bg-[#fff9] hidden" id="loader">
+                <div class="w-12 h-12 animate-spin rounded-full border-4 border-solid border-red-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                    <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="mt-28 py-8 bg-gray-950">
+        <p class="text-white text-center">&copy; 2024 - Desarrollado por Laura Escalante </p>
+    </footer>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>
