@@ -168,3 +168,40 @@ const renderOptions = () => {
             <option value="-focDate">Más nuevos</option>
             <option value="focDate">Más viejos</option>`
 }
+
+const showComicDetails = async (comicId) => {
+    showDetails()
+    const { results: [comic] } = await getResourceData('comics', comicId)
+    const writers = comic.creators.items
+        .filter(creator => creator.role === 'writer')
+        .map(writer => writer.name)
+        .join(', ')
+
+    $('#resource-details').innerHTML =
+        `<figure class="max-w-96 flex-none">
+            <img class="w-full h-full" src="${comic.thumbnail.path}/portrait_uncanny.${comic.thumbnail.extension}" alt="comic">
+        </figure>
+        <div>
+            <h2 class="mb-5 text-2xl font-bold">${comic.title}</h2>
+            <h3 class="mb-5 text-lg font-bold">Publicado:</h3>
+            <p class="mb-5"></p>
+            <h3 class="mb-5 text-lg font-bold">Guionistas:</h3>
+            <p class="mb-5">${writers}</p>
+            <h3 class="mb-5 text-lg font-bold">Descripción:</h3>
+            <p class="mb-5">${comic.description}</p>
+        </div>`
+}
+
+const showCharacterDetails = async (characterId) => {
+    showDetails()
+    const { results: [character] } = await getResourceData('characters', characterId)
+
+    $('#resource-details').innerHTML =
+        `<figure class="w-full max-w-96">
+            <img class="w-full" src="${character.thumbnail.path}/portrait_uncanny.${character.thumbnail.extension}" alt="character">
+        </figure>
+        <div>
+            <h2 class="mb-5 text-2xl font-bold">${character.name}</h2>
+            <p class="mb-5">${character.description}</p>
+        </div>`
+}
