@@ -9,7 +9,6 @@ const hash = '&hash=4ff1b9f179fe4dfe2d2b36e2a5fe487c'
 let offset = 0
 let totalResults = 0
 let totalPages = 0
-let isEventAtached = false
 
 const container = $('#results') 
 const type = $('#type')
@@ -53,7 +52,6 @@ const getData = async () => {
         resource === 'comics' ? url += `&titleStartsWith=${searchTerm}` : url += `&nameStartsWith=${searchTerm}`
     }
 
-    console.log('URL', url)
     return fetchData(url)
 }
 
@@ -65,7 +63,6 @@ const getResourceData = async (resource, id, subResource = '') => {
     }
 
     resourceUrl += `?${ts}${publicKey}${hash}&offset=${offset}`
-    console.log('resourceURL', resourceUrl)
 
     return fetchData(resourceUrl)
 }
@@ -101,34 +98,25 @@ const handlePagination = () => {
 }
 
 const updatePagination = async (callback) => {
-    console.log('offset antes de los eventos',offset)
-    if (!isEventAtached) {
-        $('#first-page').addEventListener('click', async () => {
-            resetOffset()
-            await callback()
-        })
-        $('#prev-page').addEventListener('click', async () => {
-            offset -= 20
-            console.log('offset prev', offset)
-            await callback()
-        })
-        $('#next-page').addEventListener('click', async () => {
-            offset += 20
-            console.log('offset next', offset)
-            await callback()
-        })
-        $('#last-page').addEventListener('click', async () => {
-            offset = (totalPages - 1) * 20
-            console.log('offset last', offset)
-            await callback()
-        })
-        type.addEventListener('change', () => {
-            resetOffset()
-        })
-        
-        isEventAtached = true
+    $('#first-page').onclick= async () => {
+        resetOffset()
+        await callback()
     }
-    isEventAtached = false
+    $('#prev-page').onclick = async () => {
+        offset -= 20
+        await callback()
+    }
+    $('#next-page').onclick = async () => {
+        offset += 20
+        await callback()
+    }
+    $('#last-page').onclick = async () => {
+        offset = (totalPages - 1) * 20
+        await callback()
+    }
+    type.onchange = () => {
+        resetOffset()
+    }
 }
 
 const renderComicCard = (comic) => {
@@ -263,6 +251,7 @@ const updateResourceData = async (resource, id, subresource) => {
 const initializeApp = () => {
     $('#search').addEventListener('click', () =>{
         resetOffset()
+        updatePagination(updateResults)
         updateResults()
         hideDetails()
     })
