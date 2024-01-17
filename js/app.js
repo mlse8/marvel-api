@@ -58,6 +58,18 @@ const getResourceData = async (resource, id, subResource = '') => {
     return fetchData(resourceUrl)
 }
 
+const getIdResource = (selectors, callback, updateDataCallback) => {
+    selectors.forEach(button => {
+        button.addEventListener("click", () => {
+            const id = button.getAttribute("data-id")
+            resetOffset()
+            callback(id)
+            updateDataCallback(id)
+            updatePagination(() => updateDataCallback(id))
+        })
+    })
+}
+
 const handlePagination = () => {
     if (offset === 0) {
         $('#first-page').disabled = true
