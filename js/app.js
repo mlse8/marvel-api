@@ -57,3 +57,52 @@ const getResourceData = async (resource, id, subResource = '') => {
 
     return fetchData(resourceUrl)
 }
+
+const handlePagination = () => {
+    if (offset === 0) {
+        $('#first-page').disabled = true
+        $('#prev-page').disabled = true
+    } else {
+        $('#first-page').disabled = false
+        $('#prev-page').disabled = false
+    }
+    
+    if (offset + 20 >= totalResults || totalPages === 1) {
+        $('#last-page').disabled = true
+        $('#next-page').disabled = true
+    } else {
+        $('#last-page').disabled = false
+        $('#next-page').disabled = false
+    }
+}
+
+const updatePagination = async (callback) => {
+    console.log('offset antes de los eventos',offset)
+    if (!isEventAtached) {
+        $('#first-page').addEventListener('click', async () => {
+            resetOffset()
+            await callback()
+        })
+        $('#prev-page').addEventListener('click', async () => {
+            offset -= 20
+            console.log('offset prev', offset)
+            await callback()
+        })
+        $('#next-page').addEventListener('click', async () => {
+            offset += 20
+            console.log('offset next', offset)
+            await callback()
+        })
+        $('#last-page').addEventListener('click', async () => {
+            offset = (totalPages - 1) * 20
+            console.log('offset last', offset)
+            await callback()
+        })
+        type.addEventListener('change', () => {
+            resetOffset()
+        })
+        
+        isEventAtached = true
+    }
+    isEventAtached = false
+}
