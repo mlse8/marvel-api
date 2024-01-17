@@ -154,3 +154,17 @@ const renderCharacters = (data) => {
 
     getIdResource($$('.show-character-details'), (id) => showCharacterDetails(id), (id) => updateResourceData('characters', id, 'comics'))
 }
+
+const renderOptions = () => {
+    cleanContainer(sort)
+    type.value === "characters" ? 
+        sort.innerHTML += 
+            `<option value="name">A/Z</option>
+            <option value="-name">Z/A</option>`
+        :
+        sort.innerHTML += 
+            `<option value="title">A/Z</option>
+            <option value="-title">Z/A</option>
+            <option value="-focDate">Más nuevos</option>
+            <option value="focDate">Más viejos</option>`
+}
