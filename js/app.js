@@ -228,7 +228,7 @@ const showCharacterDetails = async (characterId) => {
         </figure>
         <div>
             <h2 class="mb-5 text-2xl font-bold">${character.name}</h2>
-            <p class="mb-5">${character.description}</p>
+            <p class="mb-5">${character.description || 'No hay información disponible'}</p>
         </div>`
 }
 
