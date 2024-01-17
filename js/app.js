@@ -1,3 +1,17 @@
+const urlBase = 'http://gateway.marvel.com/v1/public/'
+let ts = 'ts=1'
+const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
+const hash = '&hash=4ff1b9f179fe4dfe2d2b36e2a5fe487c'
+
+let offset = 0
+let totalResults = 0
+let totalPages = 0
+let isEventAtached = false
+
+const container = $('#results') 
+const type = $('#type')
+const sort = $('#sort')
+
 const $ = (selector) => document.querySelector(selector)
 const $$ = (selector) => document.querySelectorAll(selector)
 const cleanContainer = (selector) => selector.innerHTML = ''
@@ -12,19 +26,16 @@ const hideLoader = () => $('#loader').classList.add('hidden')
 
 const showLoader = () => $('#loader').classList.remove('hidden')
 
-const urlBase = 'http://gateway.marvel.com/v1/public/'
-let ts = 'ts=1'
-const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
-const hash = '&hash=4ff1b9f179fe4dfe2d2b36e2a5fe487c'
+const renderTitle = (arr) => arr.length ? $('#results-title').innerText = 'Resultados' : $('#results-title').innerText = 'No se encontraron resultados' 
 
-let offset = 0
-let totalResults = 0
-let totalPages = 0
-let isEventAtached = false
+const updateTotalResults = (total) => $('#total-results').innerText = totalResults = total
 
-const container = $('#results') 
-const type = $('#type')
-const sort = $('#sort')
+const updateTotalPages = (total) => {
+    totalPages = Math.ceil(total / 20)
+    const currentPage = Math.floor(offset / 20) + 1
+    $('#page').innerText = currentPage
+    $('#total-pages').innerText = totalPages
+}
 
 const fetchData = async (url) => {
     const response = await fetch(url)
