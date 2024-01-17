@@ -183,22 +183,25 @@ const renderOptions = () => {
 
 const formatReleaseDate = (comic) => {
     const onSaleDate = comic.dates.find((date) => date.type === 'onsaleDate')
+    const releaseDate = onSaleDate && onSaleDate.date
+        ? new Intl.DateTimeFormat('es-AR').format(new Date(onSaleDate.date))
+        : 'Fecha no disponible'
 
-    if (onSaleDate && onSaleDate.date) {
-        const releaseDate = new Intl.DateTimeFormat('es-AR').format(new Date(onSaleDate.date))
-        return releaseDate
-    } else {
-        return 'Fecha no disponible'
-    }
+    return releaseDate
+}
+
+const getWriters = (creators) => {
+    const writers = creators.items
+        .filter(creator => creator.role === 'writer')
+        .map(writer => writer.name)
+        .join(', ')
+
+    return writers || 'No hay información sobre los guionistas'
 }
 
 const showComicDetails = async (comicId) => {
     showDetails()
     const { results: [comic] } = await getResourceData('comics', comicId)
-    const writers = comic.creators.items
-        .filter(creator => creator.role === 'writer')
-        .map(writer => writer.name)
-        .join(', ')
 
     $('#resource-details').innerHTML =
         `<figure class="max-w-96 flex-none">
@@ -209,7 +212,7 @@ const showComicDetails = async (comicId) => {
             <h3 class="mb-5 text-lg font-bold">Publicado:</h3>
             <p class="mb-5">${formatReleaseDate(comic)}</p>
             <h3 class="mb-5 text-lg font-bold">Guionistas:</h3>
-            <p class="mb-5">${writers}</p>
+            <p class="mb-5">${getWriters(comic.creators)}</p>
             <h3 class="mb-5 text-lg font-bold">Descripción:</h3>
             <p class="mb-5">${comic.description}</p>
         </div>`
