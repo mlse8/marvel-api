@@ -1,3 +1,6 @@
+const $ = (selector) => document.querySelector(selector)
+const $$ = (selector) => document.querySelectorAll(selector)
+
 const urlBase = 'http://gateway.marvel.com/v1/public/'
 let ts = 'ts=1'
 const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
@@ -12,8 +15,6 @@ const container = $('#results')
 const type = $('#type')
 const sort = $('#sort')
 
-const $ = (selector) => document.querySelector(selector)
-const $$ = (selector) => document.querySelectorAll(selector)
 const cleanContainer = (selector) => selector.innerHTML = ''
 
 const resetOffset = () => offset = 0
@@ -228,3 +229,49 @@ const showCharacterDetails = async (characterId) => {
             <p class="mb-5">${character.description}</p>
         </div>`
 }
+
+const updateResults = async () => {
+    showLoader()
+    const { results, total } = await getData()
+
+    updateTotalResults(total)
+    updateTotalPages(total)
+    renderTitle(results)
+
+    if (type.value === 'characters') {
+        renderCharacters(results)
+    } else {
+        renderComics(results)
+    }
+
+    handlePagination()
+    hideLoader()
+}
+
+const updateResourceData = async (resource, id, subresource) => {
+    showLoader()
+    const { results, total } = await getResourceData(resource, id, subresource)
+
+    renderTitle(results)
+    updateTotalResults(total)
+    updateTotalPages(total)
+    subresource === 'characters' ? renderCharacters (results) : renderComics(results)
+    handlePagination()
+    hideLoader()
+}
+
+const initializeApp = () => {
+    $('#search').addEventListener('click', () =>{
+        resetOffset()
+        updateResults()
+        hideDetails()
+    })
+
+    type.addEventListener('change', renderOptions)
+    
+    renderOptions()
+    updatePagination(updateResults)
+    updateResults()
+}
+
+window.addEventListener('load', initializeApp)
