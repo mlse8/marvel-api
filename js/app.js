@@ -2,6 +2,16 @@ const $ = (selector) => document.querySelector(selector)
 const $$ = (selector) => document.querySelectorAll(selector)
 const cleanContainer = (selector) => selector.innerHTML = ''
 
+const resetOffset = () => offset = 0
+
+const hideDetails = () => $('#resource-details').classList.add('hidden')
+
+const showDetails = () => $('#resource-details').classList.remove('hidden')
+
+const hideLoader = () => $('#loader').classList.add('hidden')
+
+const showLoader = () => $('#loader').classList.remove('hidden')
+
 const urlBase = 'http://gateway.marvel.com/v1/public/'
 let ts = 'ts=1'
 const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
