@@ -214,7 +214,7 @@ const showComicDetails = async (comicId) => {
             <h3 class="mb-5 text-lg font-bold">Guionistas:</h3>
             <p class="mb-5">${getWriters(comic.creators)}</p>
             <h3 class="mb-5 text-lg font-bold">Descripción:</h3>
-            <p class="mb-5">${comic.description}</p>
+            <p class="mb-5">${comic.description || 'No hay información disponible'}</p>
         </div>`
 }
 
