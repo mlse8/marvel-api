@@ -123,7 +123,7 @@ const updatePagination = async (callback) => {
 
 const renderComicCard = (comic) => {
     return `
-        <div class="show-comic-details comic cursor-pointer" data-id="${comic.id}">
+        <div class="show-comic-details cursor-pointer [&_figure]:hover:translate-y-[-3%] [&_h3]:hover:text-red-600" data-id="${comic.id}">
             <figure class="shadow-lg shadow-gray-400 transition duration-300">
                 <img src="${comic.thumbnail.path}/portrait_uncanny.${comic.thumbnail.extension}" alt="marvel-comic" class="h-full mb-4">
             </figure>
@@ -133,11 +133,11 @@ const renderComicCard = (comic) => {
 }
 
 const renderCharacterCard = (character) => {
-    return `<div class="show-character-details character cursor-pointer" data-id="${character.id}"> 
+    return `<div class="show-character-details cursor-pointer [&_img]:hover:scale-110 [&_div]:hover:bg-red-600" data-id="${character.id}"> 
         <figure class="border-b-4 border-red-600 overflow-hidden">
-            <img src="${character.thumbnail.path}/portrait_uncanny.${character.thumbnail.extension}" alt="marvel-character" class="character-thumbnail transition duration-300">
+            <img src="${character.thumbnail.path}/portrait_uncanny.${character.thumbnail.extension}" alt="marvel-character" class="transition duration-300">
         </figure>
-        <div class="character-name bg-gray-950 transition duration-300">
+        <div class="bg-gray-950 transition duration-300">
             <h3 class="h-24 py-4 px-6 text-sm font-bold text-white">${character.name}</h3>
         </div>
     </div>`
