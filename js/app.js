@@ -26,7 +26,9 @@ const hideLoader = () => $('#loader').classList.add('hidden')
 
 const showLoader = () => $('#loader').classList.remove('hidden')
 
-const renderTitle = (arr) => arr.length ? $('#results-title').innerText = 'Resultados' : $('#results-title').innerText = 'No se encontraron resultados' 
+const renderTitle = (total, resource) => resource || (total >= 0 && resource) 
+    ? $('#results-title').innerText = `${resource}`
+    : (container.innerHTML = `<h2 class="mb-5 col-span-3 text-2xl font-bold">No se encontraron resultados</h2>`, $('#results-title').innerText = 'Resultados')
 
 const updateTotalResults = (total) => $('#total-results').innerText = totalResults = total
 
@@ -147,10 +149,13 @@ const renderComics = (data) => {
         acc += renderComicCard(comic)
     })
 
-    container.innerHTML = acc
-    container.classList.remove("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
-    container.classList.add("grid-cols-3", "md:grid-cols-5")
-
+    if (acc) {
+        container.innerHTML = acc
+        container.classList.remove("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+        container.classList.add("grid-cols-3", "md:grid-cols-5")
+    } else {
+        renderTitle()
+    }
     getIdResource($$('.show-comic-details'), (id) => showComicDetails(id), (id) => updateResourceData('comics', id, 'characters'))
 }
 
@@ -160,21 +165,23 @@ const renderCharacters = (data) => {
         acc += renderCharacterCard(character)
     })
 
-    container.innerHTML = acc
-    container.classList.remove("grid-cols-3", "md:grid-cols-5")
-    container.classList.add("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
-
+    if (acc) {
+        container.innerHTML = acc
+        container.classList.remove("grid-cols-3", "md:grid-cols-5")
+        container.classList.add("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+    } else {
+        renderTitle()
+    }
     getIdResource($$('.show-character-details'), (id) => showCharacterDetails(id), (id) => updateResourceData('characters', id, 'comics'))
 }
 
 const renderOptions = () => {
     cleanContainer(sort)
-    type.value === "characters" ? 
-        sort.innerHTML += 
+    type.value === "characters" 
+        ? sort.innerHTML += 
             `<option value="name">A/Z</option>
             <option value="-name">Z/A</option>`
-        :
-        sort.innerHTML += 
+        : sort.innerHTML += 
             `<option value="title">A/Z</option>
             <option value="-title">Z/A</option>
             <option value="-focDate">Más nuevos</option>
@@ -238,7 +245,7 @@ const updateResults = async () => {
 
     updateTotalResults(total)
     updateTotalPages(total)
-    renderTitle(results)
+    renderTitle(total)
 
     if (type.value === 'characters') {
         renderCharacters(results)
@@ -250,14 +257,15 @@ const updateResults = async () => {
     hideLoader()
 }
 
-const updateResourceData = async (resource, id, subresource) => {
+const updateResourceData = async (resource, id, subResource) => {
     showLoader()
-    const { results, total } = await getResourceData(resource, id, subresource)
+    const { results, total } = await getResourceData(resource, id, subResource)
 
-    renderTitle(results)
     updateTotalResults(total)
     updateTotalPages(total)
-    subresource === 'characters' ? renderCharacters (results) : renderComics(results)
+    subResource === 'characters' 
+        ? (renderCharacters (results), renderTitle(total, 'Personajes')) 
+        : (renderComics(results), renderTitle(total, 'Comics'))
     handlePagination()
     hideLoader()
 }
