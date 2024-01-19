@@ -7,6 +7,7 @@ const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
 const hash = '&hash=4ff1b9f179fe4dfe2d2b36e2a5fe487c'
 
 let offset = 0
+let storedOffset = 0
 let totalResults = 0
 let totalPages = 0
 
@@ -95,25 +96,26 @@ const handlePagination = () => {
     }
 }
 
+const resetAndUpdateOffset = async (offsetValue, callback) => {
+    offset = offsetValue
+    if (callback === updateResults) {
+        storedOffset = offset
+    }
+    await callback()
+}
+
 const updatePagination = async (callback) => {
-    $('#first-page').onclick= async () => {
-        resetOffset()
-        await callback()
+    $('#first-page').onclick = async () => {
+        await resetAndUpdateOffset(0, callback)
     }
     $('#prev-page').onclick = async () => {
-        offset -= 20
-        await callback()
+        await resetAndUpdateOffset(offset - 20, callback)
     }
     $('#next-page').onclick = async () => {
-        offset += 20
-        await callback()
+        await resetAndUpdateOffset(offset + 20, callback)
     }
     $('#last-page').onclick = async () => {
-        offset = (totalPages - 1) * 20
-        await callback()
-    }
-    type.onchange = () => {
-        resetOffset()
+        await resetAndUpdateOffset((totalPages - 1) * 20, callback)
     }
 }
 
@@ -270,16 +272,29 @@ const updateResourceData = async (resource, id, subResource) => {
     hideElement('#loader')
 }
 
+const handleResults = () => {
+    updatePagination(updateResults)
+    updateResults()
+    hideElement('#resource-details')
+    hideElement('#back-to-search')
+}
+
 const initializeApp = () => {
     $('#search').addEventListener('click', () =>{
         resetOffset()
-        updatePagination(updateResults)
-        updateResults()
-        hideElement('#resource-details')
-        hideElement('#back-to-search')
+        storedOffset = offset
+        handleResults()
     })
 
-    type.addEventListener('change', renderOptions)
+    $('#back-to-search').addEventListener('click', () => {
+        offset = storedOffset
+        handleResults()
+    })
+
+    type.addEventListener('change', () => { 
+        renderOptions()
+        resetOffset()
+    })
     
     renderOptions()
     updatePagination(updateResults)
