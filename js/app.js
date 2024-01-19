@@ -18,13 +18,9 @@ const cleanContainer = (selector) => selector.innerHTML = ''
 
 const resetOffset = () => offset = 0
 
-const hideDetails = () => $('#resource-details').classList.add('hidden')
+const hideElement = (selector) => $(selector).classList.add("hidden")
 
-const showDetails = () => $('#resource-details').classList.remove('hidden')
-
-const hideLoader = () => $('#loader').classList.add('hidden')
-
-const showLoader = () => $('#loader').classList.remove('hidden')
+const showElement = (selector) => $(selector).classList.remove("hidden")
 
 const renderTitle = (total, resource) => resource || (total >= 0 && resource) 
     ? $('#results-title').innerText = `${resource}`
@@ -207,7 +203,7 @@ const getWriters = (creators) => {
 }
 
 const showComicDetails = async (comicId) => {
-    showDetails()
+    showElement('#resource-details')
     const { results: [comic] } = await getResourceData('comics', comicId)
 
     $('#resource-details').innerHTML =
@@ -223,10 +219,12 @@ const showComicDetails = async (comicId) => {
             <h3 class="mb-5 text-lg font-bold">Descripción:</h3>
             <p class="mb-5">${comic.description || 'No hay información disponible'}</p>
         </div>`
+
+    showElement('#back-to-search')
 }
 
 const showCharacterDetails = async (characterId) => {
-    showDetails()
+    showElement('#resource-details')
     const { results: [character] } = await getResourceData('characters', characterId)
 
     $('#resource-details').innerHTML =
@@ -237,10 +235,12 @@ const showCharacterDetails = async (characterId) => {
             <h2 class="mb-5 text-2xl font-bold">${character.name}</h2>
             <p class="mb-5">${character.description || 'No hay información disponible'}</p>
         </div>`
+    
+    showElement('#back-to-search')
 }
 
 const updateResults = async () => {
-    showLoader()
+    showElement('#loader')
     const { results, total } = await getData()
 
     updateTotalResults(total)
@@ -254,11 +254,11 @@ const updateResults = async () => {
     }
 
     handlePagination()
-    hideLoader()
+    hideElement('#loader')
 }
 
 const updateResourceData = async (resource, id, subResource) => {
-    showLoader()
+    showElement('#loader')
     const { results, total } = await getResourceData(resource, id, subResource)
 
     updateTotalResults(total)
@@ -267,7 +267,7 @@ const updateResourceData = async (resource, id, subResource) => {
         ? (renderCharacters (results), renderTitle(total, 'Personajes')) 
         : (renderComics(results), renderTitle(total, 'Comics'))
     handlePagination()
-    hideLoader()
+    hideElement('#loader')
 }
 
 const initializeApp = () => {
@@ -275,7 +275,8 @@ const initializeApp = () => {
         resetOffset()
         updatePagination(updateResults)
         updateResults()
-        hideDetails()
+        hideElement('#resource-details')
+        hideElement('#back-to-search')
     })
 
     type.addEventListener('change', renderOptions)
