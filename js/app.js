@@ -298,6 +298,7 @@ const toggleDarkMode = (darkModeOn) => {
     $$('.btn').forEach(element => element.classList.toggle('bg-white', darkModeOn))
     $$('.btn').forEach(element => element.classList.toggle('text-neutral-900', darkModeOn))
     $$('.btn').forEach(element => element.classList.toggle('hover:text-white', darkModeOn))
+    $$('.btn').forEach(element => element.classList.toggle('disabled:hover:text-neutral-900', darkModeOn))
 
     saveDarkMode(darkModeOn)
 }
@@ -330,7 +331,7 @@ const initializeApp = () => {
 
     const storedDarkMode = getDarkMode()
     toggleDarkMode(storedDarkMode)
-    
+
     $('#btn-theme').addEventListener('click', toggleTheme)
 }
 
