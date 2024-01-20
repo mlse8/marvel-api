@@ -15,6 +15,8 @@ const container = $('#results')
 const type = $('#type')
 const sort = $('#sort')
 
+const saveDarkMode = (darkModeOn) => localStorage.setItem('darkMode', JSON.stringify(darkModeOn))
+
 const cleanContainer = (selector) => selector.innerHTML = ''
 
 const resetOffset = () => offset = 0
@@ -34,6 +36,11 @@ const updateTotalPages = (total) => {
     const currentPage = Math.floor(offset / 20) + 1
     $('#page').innerText = currentPage
     $('#total-pages').innerText = totalPages
+}
+
+const getDarkMode = () => {
+    const storedDarkMode = localStorage.getItem('darkMode')
+    return storedDarkMode ? JSON.parse(storedDarkMode) : false
 }
 
 const fetchData = async (url) => {
@@ -279,6 +286,27 @@ const handleResults = () => {
     hideElement('#back-to-search')
 }
 
+const toggleDarkMode = (darkModeOn) => {
+    $('.light-on').classList.toggle('hidden', darkModeOn)
+    $('.light-off').classList.toggle('hidden', !darkModeOn)
+    $('body').classList.toggle('bg-gray-900', darkModeOn)
+    $('body').classList.toggle('text-white', darkModeOn)
+    $('#search-term').classList.toggle('bg-gray-900', darkModeOn)
+    $('#search-term').classList.toggle('border-white', darkModeOn)
+    $('#loader').classList.toggle('bg-[#11182790]', darkModeOn)
+    $$('select').forEach(element => element.classList.toggle('bg-gray-900', darkModeOn))
+    $$('.btn').forEach(element => element.classList.toggle('bg-white', darkModeOn))
+    $$('.btn').forEach(element => element.classList.toggle('text-neutral-900', darkModeOn))
+    $$('.btn').forEach(element => element.classList.toggle('hover:text-white', darkModeOn))
+
+    saveDarkMode(darkModeOn)
+}
+
+const toggleTheme = () => {
+    const isDarkMode = $('body').classList.contains('bg-gray-900')
+    toggleDarkMode(!isDarkMode)
+}
+
 const initializeApp = () => {
     $('#search').addEventListener('click', () =>{
         resetOffset()
@@ -299,6 +327,11 @@ const initializeApp = () => {
     renderOptions()
     updatePagination(updateResults)
     updateResults()
+
+    const storedDarkMode = getDarkMode()
+    toggleDarkMode(storedDarkMode)
+    
+    $('#btn-theme').addEventListener('click', toggleTheme)
 }
 
 window.addEventListener('load', initializeApp)

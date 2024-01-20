@@ -22,13 +22,17 @@
         <div class="flex justify-center">
             <h1 class="px-2 font-[Bangers] text-5xl font-bold text-white bg-red-600">ADA COMICS</h1>
         </div>
+        <button class="py-2 px-3 absolute top-1 right-5 text-white bg-gray-800 rounded-full transition duration-300 hover:bg-transparent" id="btn-theme">
+            <i class="fa-solid fa-lightbulb light-on"></i>
+            <i class="fa-regular fa-lightbulb light-off hidden"></i>
+        </button>
     </header>
     <div class="hero min-h-96 bg-cover"></div>
     <main class="max-w-6xl m-auto px-5">
         <!-- Búsqueda y filtros -->
         <div class="my-16">
             <div class="mb-5 flex items-center gap-4">
-                <button class="py-1.5 px-2.5 text-white bg-neutral-900 rounded-full transition duration-300 hover:bg-red-600 hidden" id="back-to-search">
+                <button class="btn py-1.5 px-2.5 text-white bg-neutral-900 rounded-full transition duration-300 hover:bg-red-600 hidden" id="back-to-search">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <h2 class="text-2xl font-bold">Búsqueda</h2>
@@ -50,7 +54,7 @@
                             <select name="sort" id="sort" class="font-bold text-sm outline-red-600"></select>
                         </div>
                     </div>
-                    <button class="ml-auto py-1.5 px-2.5 text-white bg-neutral-900 transition duration-300 hover:bg-red-600" type="button" id="search">BUSCAR</button>
+                    <button class="btn ml-auto py-1.5 px-2.5 text-white bg-neutral-900 transition duration-300 hover:bg-red-600" type="button" id="search">BUSCAR</button>
                 </div>
             </div>
         </div>
@@ -63,16 +67,16 @@
                 <p class="mb-12 text-xs font-bold text-gray-500"><span id="total-results"></span> RESULTADOS</p>
                 <div class="mb-16 grid grid-cols-3 gap-y-14 gap-x-5 md:grid-cols-5" id="results"></div>
                 <div class="buttons-container flex justify-center gap-2.5">
-                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="first-page">
+                    <button class="btn w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="first-page">
                         <i class="fa-solid fa-angles-left"></i>
                     </button>
-                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="prev-page">
+                    <button class="btn w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="prev-page">
                         <i class="fa-solid fa-angle-left"></i>
                     </button>
-                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="next-page">
+                    <button class="btn w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="next-page">
                         <i class="fa-solid fa-angle-right"></i>
                     </button>
-                    <button class="w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="last-page">
+                    <button class="btn w-10 h-10 text-white bg-neutral-900 transition duration-300 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed" id="last-page">
                         <i class="fa-solid fa-angles-right"></i>
                     </button>
                 </div>
