@@ -23,8 +23,8 @@
             <h1 class="px-2 font-[Bangers] text-5xl font-bold text-white bg-red-600">ADA COMICS</h1>
         </div>
         <button class="py-2 px-3 absolute top-1 right-5 text-white bg-gray-800 rounded-full transition duration-300 hover:bg-transparent" id="btn-theme">
-            <i class="fa-solid fa-lightbulb light-on"></i>
-            <i class="fa-regular fa-lightbulb light-off hidden"></i>
+            <i class="fa-solid fa-lightbulb" id="light-on"></i>
+            <i class="fa-regular fa-lightbulb hidden" id="light-off"></i>
         </button>
     </header>
     <div class="hero min-h-96 bg-cover"></div>
@@ -44,14 +44,14 @@
                     <div class="flex gap-7">
                         <div>
                             <label for="type" class="text-xs font-bold text-gray-500">TIPO</label>
-                            <select name="type" id="type" class="font-bold text-sm outline-red-600">
+                            <select name="type" id="type" class="font-bold text-sm outline-red-600 select">
                                 <option value="comics">COMICS</option>
                                 <option value="characters">PERSONAJES</option>
                             </select>
                         </div>
                         <div>
                             <label for="sort" class="text-xs font-bold text-gray-500">ORDEN</label>
-                            <select name="sort" id="sort" class="font-bold text-sm outline-red-600"></select>
+                            <select name="sort" id="sort" class="font-bold text-sm outline-red-600 select"></select>
                         </div>
                     </div>
                     <button class="btn ml-auto py-1.5 px-2.5 text-white bg-neutral-900 transition duration-300 hover:bg-red-600" type="button" id="search">BUSCAR</button>
@@ -94,5 +94,6 @@
     </footer>
 
     <script src="./js/app.js"></script>
+    <script src="./js/darkMode.js"></script>
 </body>
 </html>
