@@ -49,28 +49,46 @@ const fetchData = async (url) => {
     return data.data
 }
 
-const getData = async () => {
+const getSearchParams = (isSearch) => {
     const searchTerm = $('#search-term').value.trim()
-    const resource = type.value
-    let url = `${urlBase}${resource}?${ts}${publicKey}${hash}&offset=${offset}&orderBy=${sort.value}`
+    let searchParams = `?${ts}${publicKey}${hash}&offset=${offset}`
 
-    if (searchTerm) {
-        resource === 'comics' ? url += `&titleStartsWith=${searchTerm}` : url += `&nameStartsWith=${searchTerm}`
+    if (!isSearch) {
+        return searchParams
     }
 
-    return fetchData(url)
+    searchParams += `&orderBy=${sort.value}`
+
+    if (!searchTerm.length) {
+        return searchParams
+    }
+
+    if (type.value === 'comics') {
+        searchParams += `&titleStartsWith=${searchTerm}`
+    }
+
+    if (type.value === 'characters') {
+        searchParams += `&nameStartsWith=${searchTerm}`
+    }
+
+    return searchParams
 }
 
-const getResourceData = async (resource, id, subResource = '') => {
-    let resourceUrl = `${urlBase}${resource}/${id}`
-    
-    if (subResource) {
-        resourceUrl += `/${subResource}`
+const getURL = (resource, resourceId, subResource) => {
+    const isSearch = !resourceId && !subResource
+    let url = `${urlBase}${resource}`
+
+    if (resourceId) {
+        url += `/${resourceId}`
     }
 
-    resourceUrl += `?${ts}${publicKey}${hash}&offset=${offset}`
+    if (subResource) {
+        url += `/${subResource}`
+    }
 
-    return fetchData(resourceUrl)
+    url += getSearchParams(isSearch)
+    
+    return url
 }
 
 const getIdResource = (selectors, callback, updateDataCallback) => {
@@ -148,36 +166,36 @@ const renderCharacterCard = (character) => {
     </div>`
 }
 
-const renderComics = (data) => {
+const renderResource = (data, renderCard, detailsSelector, updateDataCallback) => {
     let acc = ''
-    data.forEach(comic => {
-        acc += renderComicCard(comic)
+    data.forEach(item => {
+        acc += renderCard(item)
     })
 
     if (acc) {
         container.innerHTML = acc
-        container.classList.remove("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
-        container.classList.add("grid-cols-3", "md:grid-cols-5")
+
+        if (detailsSelector === '.show-comic-details') {
+            container.classList.remove("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+            container.classList.add("grid-cols-3", "md:grid-cols-5")
+        } else {
+            container.classList.remove("grid-cols-3", "md:grid-cols-5")
+            container.classList.add("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
+        }
+
     } else {
         renderTitle()
     }
-    getIdResource($$('.show-comic-details'), (id) => showComicDetails(id), (id) => updateResourceData('comics', id, 'characters'))
+
+    getIdResource($$(detailsSelector), (id) => detailsSelector === '.show-comic-details' ? showComicDetails(id) : showCharacterDetails(id), (id) => updateDataCallback && updateDataCallback(id))
+}
+
+const renderComics = (data) => {
+    renderResource(data, renderComicCard, '.show-comic-details', (id) => updateResourceData('comics', id, 'characters'))
 }
 
 const renderCharacters = (data) => {
-    let acc = ''
-    data.forEach(character => {
-        acc += renderCharacterCard(character)
-    })
-
-    if (acc) {
-        container.innerHTML = acc
-        container.classList.remove("grid-cols-3", "md:grid-cols-5")
-        container.classList.add("grid-cols-2", "md:grid-cols-4", "lg:grid-cols-6")
-    } else {
-        renderTitle()
-    }
-    getIdResource($$('.show-character-details'), (id) => showCharacterDetails(id), (id) => updateResourceData('characters', id, 'comics'))
+    renderResource(data, renderCharacterCard, '.show-character-details', (id) => updateResourceData('characters', id, 'comics'))
 }
 
 const renderOptions = () => {
@@ -213,7 +231,7 @@ const getWriters = (creators) => {
 
 const showComicDetails = async (comicId) => {
     showElement('#resource-details')
-    const { results: [comic] } = await getResourceData('comics', comicId)
+    const { results: [comic] } = await fetchData(getURL('comics', comicId))
 
     $('#resource-details').innerHTML =
         `<figure class="max-w-96 flex-none">
@@ -234,7 +252,7 @@ const showComicDetails = async (comicId) => {
 
 const showCharacterDetails = async (characterId) => {
     showElement('#resource-details')
-    const { results: [character] } = await getResourceData('characters', characterId)
+    const { results: [character] } = await fetchData(getURL('characters', characterId))
 
     $('#resource-details').innerHTML =
         `<figure class="w-full max-w-96">
@@ -250,17 +268,14 @@ const showCharacterDetails = async (characterId) => {
 
 const updateResults = async () => {
     showElement('#loader')
-    const { results, total } = await getData()
+    const resource = type.value
+    const { results, total } = await fetchData(getURL(resource))
 
     updateTotalResults(total)
     updateTotalPages(total)
     renderTitle(total)
 
-    if (type.value === 'characters') {
-        renderCharacters(results)
-    } else {
-        renderComics(results)
-    }
+    resource === 'characters' ? renderCharacters(results) : renderComics(results)
 
     handlePagination()
     hideElement('#loader')
@@ -268,7 +283,7 @@ const updateResults = async () => {
 
 const updateResourceData = async (resource, id, subResource) => {
     showElement('#loader')
-    const { results, total } = await getResourceData(resource, id, subResource)
+    const { results, total } = await fetchData(getURL(resource, id, subResource))
 
     updateTotalResults(total)
     updateTotalPages(total)
@@ -320,10 +335,7 @@ const initializeApp = () => {
         handleResults()
     })
 
-    type.addEventListener('change', () => { 
-        renderOptions()
-        resetOffset()
-    })
+    type.addEventListener('change', renderOptions)
     
     renderOptions()
     updatePagination(updateResults)
