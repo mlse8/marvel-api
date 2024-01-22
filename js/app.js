@@ -145,7 +145,7 @@ const updatePagination = async (callback) => {
 
 const renderComicCard = (comic) => {
     return `
-        <div class="show-comic-details cursor-pointer [&_figure]:hover:translate-y-[-3%] [&_h3]:hover:text-red-600" data-id="${comic.id}">
+        <div tabindex="0" class="show-comic-details cursor-pointer [&_figure]:hover:translate-y-[-3%] [&_h3]:hover:text-red-600 [&_figure]:focus:translate-y-[-3%] [&_h3]:focus:text-red-600 focus:outline-none" data-id="${comic.id}">
             <figure class="shadow-lg shadow-gray-400 transition duration-300">
                 <img src="${comic.thumbnail.path}/portrait_uncanny.${comic.thumbnail.extension}" alt="marvel-comic" class="h-full mb-4">
             </figure>
@@ -155,7 +155,7 @@ const renderComicCard = (comic) => {
 }
 
 const renderCharacterCard = (character) => {
-    return `<div class="show-character-details cursor-pointer [&_img]:hover:scale-110 [&_div]:hover:bg-red-600" data-id="${character.id}"> 
+    return `<div tabindex="0" class="show-character-details cursor-pointer [&_img]:hover:scale-110 [&_div]:hover:bg-red-600 [&_img]:focus:scale-110 [&_div]:focus:bg-red-600 focus:outline-none" data-id="${character.id}"> 
         <figure class="border-b-4 border-red-600 overflow-hidden">
             <img src="${character.thumbnail.path}/portrait_uncanny.${character.thumbnail.extension}" alt="marvel-character" class="transition duration-300">
         </figure>
