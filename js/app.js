@@ -322,7 +322,7 @@ const initializeApp = () => {
     updatePagination(updateResults)
     updateResults()
 
-    initializeMode()
+    initializeTheme()
 }
 
 window.addEventListener('load', initializeApp)

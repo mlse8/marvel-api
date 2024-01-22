@@ -1,10 +1,13 @@
+// Enviar modo al localStorage
 const saveDarkMode = (darkModeOn) => localStorage.setItem('darkMode', JSON.stringify(darkModeOn))
 
+// Obtener modo del localStorage
 const getDarkMode = () => {
     const storedDarkMode = localStorage.getItem('darkMode')
     return storedDarkMode ? JSON.parse(storedDarkMode) : false
 }
 
+// Cambio de clases para lograr el modo oscuro
 const toggleDarkMode = (darkModeOn) => {
     const toggleClass = (element, classNames, condition) => {
         classNames.split(' ').forEach(className => element.classList.toggle(className, condition))
@@ -28,12 +31,13 @@ const toggleDarkMode = (darkModeOn) => {
     saveDarkMode(darkModeOn)
 }
 
+// Obtener estado actual del modo oscuro del localStorage, para cambiar al modo opuesto y guardar el nuevo estado
 const toggleTheme = () => {
     const isDarkMode = getDarkMode()
     toggleDarkMode(!isDarkMode)
 }
 
-const initializeMode = () => {
+const initializeTheme = () => {
     const storedDarkMode = getDarkMode()
     toggleDarkMode(storedDarkMode)
 
