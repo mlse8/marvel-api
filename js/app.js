@@ -42,6 +42,7 @@ const fetchData = async (url) => {
     return data.data
 }
 
+// Parámetros de búsqueda
 const getSearchParams = (isSearch) => {
     const searchTerm = $('#search-term').value.trim()
     let searchParams = `?${ts}${publicKey}${hash}&offset=${offset}`
@@ -67,6 +68,7 @@ const getSearchParams = (isSearch) => {
     return searchParams
 }
 
+// Construcción de url
 const getURL = (resource, resourceId, subResource) => {
     const isSearch = !resourceId && !subResource
     let url = `${urlBase}${resource}`
@@ -84,6 +86,7 @@ const getURL = (resource, resourceId, subResource) => {
     return url
 }
 
+// Obtener id del comic o personaje
 const getIdResource = (selectors, callback, updateDataCallback) => {
     selectors.forEach(button => {
         button.addEventListener("click", () => {
@@ -96,6 +99,7 @@ const getIdResource = (selectors, callback, updateDataCallback) => {
     })
 }
 
+// Habilitar y deshabilitar botones de paginación
 const handlePagination = () => {
     if (offset === 0) {
         $('#first-page').disabled = true
@@ -114,6 +118,7 @@ const handlePagination = () => {
     }
 }
 
+// Resetear y actualizar offset para volver atrás
 const resetAndUpdateOffset = async (offsetValue, callback) => {
     offset = offsetValue
     if (callback === updateResults) {
@@ -122,6 +127,7 @@ const resetAndUpdateOffset = async (offsetValue, callback) => {
     await callback()
 }
 
+// Actualizar paginación
 const updatePagination = async (callback) => {
     $('#first-page').onclick = async () => {
         await resetAndUpdateOffset(0, callback)
@@ -204,6 +210,7 @@ const renderOptions = () => {
             <option value="focDate">Más viejos</option>`
 }
 
+// Dar formato a la fecha de publicación
 const formatReleaseDate = (comic) => {
     const onSaleDate = comic.dates.find((date) => date.type === 'onsaleDate')
     const releaseDate = onSaleDate && onSaleDate.date
@@ -213,6 +220,7 @@ const formatReleaseDate = (comic) => {
     return releaseDate
 }
 
+// Obtener los guionistas
 const getWriters = (creators) => {
     const writers = creators.items
         .filter(creator => creator.role === 'writer')
@@ -259,6 +267,7 @@ const showCharacterDetails = async (characterId) => {
     showElement('#back-to-search')
 }
 
+// Actualizar resultados (todos los comics o personajes)
 const updateResults = async () => {
     showElement('#loader')
     const resource = type.value
@@ -274,6 +283,7 @@ const updateResults = async () => {
     hideElement('#loader')
 }
 
+// Actualizar cada comic o personaje
 const updateResourceData = async (resource, id, subResource) => {
     showElement('#loader')
     const { results, total } = await fetchData(getURL(resource, id, subResource))
