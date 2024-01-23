@@ -310,7 +310,6 @@ const initializeApp = () => {
         storedOffset = offset
         handleResults()
     })
-
     $('#back-to-search').addEventListener('click', () => {
         offset = storedOffset
         handleResults()
