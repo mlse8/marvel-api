@@ -1,7 +1,7 @@
 const $ = (selector) => document.querySelector(selector)
 const $$ = (selector) => document.querySelectorAll(selector)
 
-const urlBase = 'http://gateway.marvel.com/v1/public/'
+const urlBase = 'https://gateway.marvel.com/v1/public/'
 let ts = 'ts=1'
 const publicKey = '&apikey=dbd3f5275340a963c52ebcb09990e187'
 const hash = '&hash=4ff1b9f179fe4dfe2d2b36e2a5fe487c'
@@ -310,6 +310,7 @@ const initializeApp = () => {
         storedOffset = offset
         handleResults()
     })
+    
     $('#back-to-search').addEventListener('click', () => {
         offset = storedOffset
         handleResults()
