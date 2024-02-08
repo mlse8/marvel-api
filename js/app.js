@@ -37,9 +37,13 @@ const updateTotalPages = (total) => {
 }
 
 const fetchData = async (url) => {
-    const response = await fetch(url)
-    const data = await response.json()
-    return data.data
+    try {
+        const response = await fetch(url)
+        const data = await response.json()
+        return data.data
+    } catch (error) {
+        console.error('Ocurrió un error:', error.message)
+    }
 }
 
 // Parámetros de búsqueda
